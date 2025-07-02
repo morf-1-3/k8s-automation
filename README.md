@@ -28,11 +28,3 @@ It is not guaranteed that during initial setup traefik CRDs will be installed fi
 ```bash
 helmfile -f helmfiles/infra.yaml apply --selector name=traefik-crds
 ```
-
-## Links
-
-For more information you can checkout documenation of the project or view source code by following these links:
-
-- [HLD](https://wiki.portaone.com/pages/viewpage.action?pageId=277256171)
-- [Cluster Architecture](https://wiki.portaone.com/display/BECOMEDEV/DevOps+Project+-+Cluster+Architecture)
-- [Source Code](https://gitlab.portaone.com:8949/bad/bad25_todo_app)
