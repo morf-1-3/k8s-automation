@@ -1,0 +1,14 @@
+routing:
+  host: deployment-todo.duckdns.org
+
+  ingressRouteApi:
+    pathPrefix: /api
+    service:
+      name: backend
+      port: 8083
+
+  ingressRouteFront:
+    pathPrefix: /
+    service:
+      name: frontend
+      port: 8082

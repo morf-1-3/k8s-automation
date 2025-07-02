@@ -1,0 +1,20 @@
+{{- $host := .Values.routing.host }}
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Release.Name }}-http-redirect
+  namespace: {{ .Release.Namespace }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{ $host }}`)
+      kind: Rule
+      middlewares:
+        - name: {{ .Release.Name }}-redirect-to-https
+# Service is not actually used (redirect handled by middleware),
+# but required by Traefik to satisfy IngressRoute schema.
+      services:
+        - name: {{ .Values.routing.ingressRouteFront.service.name }}
+          port: {{ .Values.routing.ingressRouteFront.service.port }}

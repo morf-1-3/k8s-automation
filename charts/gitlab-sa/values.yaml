@@ -1,0 +1,2 @@
+# utilizes default k8s admin role instead of custom one
+role: "admin"

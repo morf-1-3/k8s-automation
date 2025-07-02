@@ -1,0 +1,25 @@
+# use this file to change celery-specific configuration
+# if you want to change env vars, modify values for backend service instead
+container:
+  command:
+    - "celery"
+  args:
+    - "--app"
+    - "core.celery_app.celery_app"
+    - "worker"
+    - "--loglevel=info"
+    - "--uid=nobody"
+    - "--gid=nogroup"
+
+service:
+  enabled: false
+
+fullnameOverride: celery
+
+resources:
+  requests:
+    cpu: 5m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi

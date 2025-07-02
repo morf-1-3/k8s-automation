@@ -1,0 +1,3 @@
+helmfiles:
+  - path: helmfiles/infra.yaml
+  - path: helmfiles/todo-app.yaml

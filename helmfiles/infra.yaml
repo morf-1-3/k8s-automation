@@ -1,0 +1,28 @@
+repositories:
+  - name: traefik
+    url: ghcr.io/traefik/helm
+    oci: true
+  - name: traefik-http
+    url: https://traefik.github.io/charts
+
+releases:
+  - name: traefik-crds
+    namespace: infra
+    chart: traefik-http/traefik-crds
+    createNamespace: true
+    version: 1.6.0
+
+  - name: traefik
+    namespace: infra
+    chart: traefik/traefik
+    version: "35.2.0"
+    createNamespace: true
+    needs:
+      - traefik-crds
+    values:
+      - ../values/traefik-values.yaml
+
+  - name: gitlab-sa
+    namespace: infra
+    chart: ../charts/gitlab-sa
+    createNamespace: true

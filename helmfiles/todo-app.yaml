@@ -1,0 +1,72 @@
+repositories:
+  - name: bitnami
+    oci: true
+    url: registry-1.docker.io/bitnamicharts
+
+releases:
+  - name: postgres
+    chart: bitnami/postgresql
+    version: 16.6.6
+    # postgres must be ready for startup of backend
+    wait: true
+    namespace: todo-app
+    createNamespace: true
+    secrets:
+      - ../secrets/postgres.secret.yaml
+    values:
+      - ../values/postgres.values.yaml
+
+  - name: redis
+    chart: bitnami/redis
+    version: 21.0.0
+    namespace: todo-app
+    createNamespace: true
+    secrets:
+      - ../secrets/redis.secret.yaml
+    values:
+      - ../values/redis.values.yaml
+
+    # celery and backend are both based on the same backend image
+  - name: celery
+    chart: ../charts/backend
+    namespace: todo-app
+    createNamespace: true
+    needs:
+      - redis
+    secrets:
+      - ../secrets/backend.secret.yaml
+    values:
+      - ../values/backend.values.yaml
+      - ../values/celery.values.yaml
+
+  - name: backend
+    chart: ../charts/backend
+    namespace: todo-app
+    createNamespace: true
+    needs:
+      - postgres
+    secrets:
+      - ../secrets/backend.secret.yaml
+    values:
+      - ../values/backend.values.yaml
+
+  - name: frontend
+    chart: ../charts/frontend
+    namespace: todo-app
+    createNamespace: true
+    needs:
+      - backend
+    values:
+      - ../values/frontend.values.yaml
+
+  - name: gateway
+    namespace: todo-app
+    chart: ../charts/gateway
+    createNamespace: true
+    needs:
+      - frontend
+      - backend
+    values:
+      - ../values/gateway-values.yaml
+    secrets:
+      - ../secrets/tls-secrets.yaml

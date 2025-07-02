@@ -1,0 +1,22 @@
+env:
+  SERVER_HOST_FRONT: "https://deployment-todo.duckdns.org"
+  PROJECT_NAME: "ToDo App"
+  POSTGRES_HOST: "postgres-postgresql"
+  POSTGRES_PORT: "5432"
+  POSTGRES_USER: "postgres"
+  POSTGRES_DB: "todo_db"
+  MAIL_TLS: "True"
+  SMTP_PORT: "587"
+  SMTP_HOST: "smtp.gmail.com"
+  SMTP_USER: "unknowndev051@gmail.com"
+  EMAILS_FROM_EMAIL: "unknowndev051@gmail.com"
+  EMAILS_FROM_NAME: "No Reply"
+  GOOGLE_AUTH_CLIENT_ID: "243335971569-tumfc9067e4lbg8lffsvb2r7d9rb9n6t.apps.googleusercontent.com"
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

@@ -1,0 +1,8 @@
+{{- if .Values.routing.host }}
+Access your app at:
+
+  https://{{ .Values.routing.host }}{{ .Values.routing.ingressRouteFront.pathPrefix }}
+
+{{- else }}
+No host configured. Please set `.Values.routing.host` in your values.yaml.
+{{- end }}

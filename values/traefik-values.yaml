@@ -1,0 +1,26 @@
+service:
+  enabled: true
+  type: LoadBalancer
+  spec:
+    loadBalancerIP: 34.118.114.189
+
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+    ephemeral-storage: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+    ephemeral-storage: 128Mi
+
+metrics:
+  prometheus: null

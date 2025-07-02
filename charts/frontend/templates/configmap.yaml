@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+  REACT_APP_ENVIRONMENT: {{ .Values.env.REACT_APP_ENVIRONMENT | quote }}
+  REACT_APP_GOOGLE_AUTH_CLIENT_ID: {{ .Values.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID | quote }}
+  CHOKIDAR_USEPOLLING: {{ .Values.env.CHOKIDAR_USEPOLLING | quote }}
+  FRONTEND_PORT_INTERNAL: {{ .Values.env.FRONTEND_PORT_INTERNAL | quote }}
+  APP_UID: {{ .Values.env.APP_UID | quote }}
+  APP_GID: {{ .Values.env.APP_GID | quote }}

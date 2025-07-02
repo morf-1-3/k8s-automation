@@ -1,0 +1,75 @@
+stages:
+  - verify
+  - deploy
+
+variables:
+  GKE_CLUSTER: bad-cluster
+  GKE_LOCATION: europe-central2
+
+verify-yamllint:
+  stage: verify
+  # cytopia/yamllint fails to start
+  image: python:3.11-slim
+  tags:
+    - docker
+    - linux
+  before_script:
+    - pip install yamllint
+  script:
+    # last path refers only to Chart and values files in all subfolders of chart/
+    - |
+      yamllint .sops.yaml .yamllint.yaml .gitlab-ci.yml helmfile.yaml \
+      helmfiles/ values/ secrets/ charts/*/{Chart,values}.yaml
+
+verify-helmlint:
+  stage: verify
+  # alpine/helm fails to start
+  image: alpine/k8s:1.30.13
+  tags:
+    - docker
+    - linux
+  script:
+    - helm lint charts/*
+
+verify-kubeconform:
+  stage: verify
+  # this has age, sops, helm secrets and helmfile preinstalled
+  image: ghcr.io/helmfile/helmfile:v1.1.0
+  tags:
+    - docker
+    - linux
+  before_script:
+    # install kubeconform
+    - wget https://github.com/yannh/kubeconform/releases/download/v0.7.0/kubeconform-linux-amd64.tar.gz
+    - tar -xvzf kubeconform-linux-amd64.tar.gz
+    - mv kubeconform /usr/bin
+    # make dir for artifacts
+    - mkdir -p reports
+  script:
+    - helmfile template --output-dir /tmp/helmtmpl --include-crds
+    - kubeconform -ignore-missing-schemas -output junit /tmp/helmtmpl/ > reports/kubeconform-junit.xml
+  artifacts:
+    reports:
+      junit: reports/kubeconform-junit.xml
+    when: always
+    expire_in: "7 days"
+
+deploy:
+  stage: deploy
+  image: ghcr.io/helmfile/helmfile:v1.1.0
+  tags:
+    - docker
+    - linux
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: on_success
+    - when: never
+  environment:
+    name: production
+    url: https://deployment-todo.duckdns.org
+  variables:
+    KUBECONFIG: /etc/kubeconfig
+  before_script:
+    - echo "$KUBECONFIG_B64" | base64 -d > $KUBECONFIG
+  script:
+    - helmfile apply

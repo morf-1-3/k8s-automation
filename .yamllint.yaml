@@ -1,0 +1,9 @@
+extends: default
+rules:
+  # some secret lines are 288 chars long
+  # which is far more than 80 chars
+  line-length: disable
+  # this warning requires to add '---' at the start
+  # of all the files, which would force to edit
+  # every single file in the code repo
+  document-start: disable

@@ -1,0 +1,16 @@
+auth:
+  username: postgres
+  database: todo_db
+primary:
+  resources:
+    requests:
+      cpu: 300m
+      memory: 384Mi
+    limits:
+      cpu: 600m
+      memory: 768Mi
+
+  persistence:
+    enabled: true
+    storageClass: standard-rwo
+    size: 1Gi

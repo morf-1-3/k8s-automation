@@ -1,0 +1,6 @@
+ServiceAccount for GitLab was created.
+To get data certificate (base64 encoded) and token (decoded) run following commands:
+
+kubectl get secret {{ .Release.Name }}-token -n {{ .Release.Namespace }} -o=jsonpath='{.data.ca\.crt}' 
+
+kubectl get secret {{ .Release.Name }}-token -n {{ .Release.Namespace }} -o=jsonpath='{.data.token}' | base64 -d 

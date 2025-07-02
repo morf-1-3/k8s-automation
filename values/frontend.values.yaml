@@ -1,0 +1,14 @@
+env:
+  REACT_APP_ENVIRONMENT: "production"
+  REACT_APP_GOOGLE_AUTH_CLIENT_ID: "243335971569-tumfc9067e4lbg8lffsvb2r7d9rb9n6t.apps.googleusercontent.com"
+
+resources:
+  requests:
+    cpu: 5m
+    memory: 128Mi
+  limits:
+    # with 400m limits it takes ~120 seconds for pod
+    # to become ready to accept requests
+    cpu: 400m
+    # it needs a lot of memory for startup compilation
+    memory: 768Mi
